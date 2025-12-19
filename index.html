@@ -8,104 +8,93 @@
         :root { 
             --hospital-navy: #002147; 
             --hospital-green: #28a745;
-            --soft-pink: #fff0f3; /* Aesthetic light pink */
-            --border-color: #d1d1d1;
+            --aesthetic-pink: #ffe5ec; /* Professional Light Pink */
+            --border-color: #ced4da;
         }
         
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: var(--soft-pink); 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background-color: var(--aesthetic-pink); 
             margin: 0; 
-            padding: 15px; 
+            padding: 10px; 
             display: flex;
             justify-content: center;
         }
         
         .container { 
-            max-width: 900px; 
+            max-width: 850px; 
             width: 100%;
             background: white; 
-            padding: 30px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            border-radius: 12px;
-            border-top: 10px solid var(--hospital-navy);
+            padding: 25px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); 
+            border-radius: 15px;
+            border-top: 12px solid var(--hospital-navy);
+            margin-top: 10px;
         }
 
-        /* Header Section */
-        .header { text-align: center; margin-bottom: 25px; }
-        .logo { max-width: 250px; height: auto; margin-bottom: 10px; }
-        .header h1 { margin: 0; font-size: 1.6rem; color: var(--hospital-navy); text-transform: uppercase; letter-spacing: 1px; }
-        .header p { margin: 5px 0; font-weight: 600; color: #555; border-bottom: 2px solid #eee; display: inline-block; padding-bottom: 5px; }
+        /* Header & Logo */
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo { 
+            max-width: 280px; 
+            height: auto; 
+            margin-bottom: 10px; 
+        }
+        .header h1 { margin: 0; font-size: 1.4rem; color: var(--hospital-navy); }
+        .header p { margin: 2px 0; font-weight: bold; color: #666; font-size: 0.9rem; }
 
         .form-meta { display: flex; justify-content: flex-end; margin-bottom: 15px; }
-        .form-no-box { border: 1px solid #333; padding: 5px 15px; font-weight: bold; background: #fdfdfd; }
-        .form-no-box span { color: #cc0000; }
+        .form-no-box { border: 2px solid var(--hospital-navy); padding: 5px 12px; font-weight: bold; border-radius: 5px; }
+        .form-no-box span { color: #d00; }
 
-        /* Input Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        /* Mobile Friendly Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 15px; }
         .input-group { display: flex; flex-direction: column; }
-        label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--hospital-navy); margin-bottom: 4px; }
+        label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: var(--hospital-navy); margin-bottom: 5px; }
         input { 
-            padding: 10px; 
+            padding: 12px; 
             border: 1px solid var(--border-color); 
-            border-radius: 4px; 
-            font-size: 14px; 
-            background: #fafafa;
+            border-radius: 6px; 
+            font-size: 16px; /* Prevents mobile zoom */
+            background: #fcfcfc;
         }
-        input:focus { outline: none; border-color: var(--hospital-green); background: #fff; }
 
-        /* Table Styling */
-        .table-wrapper { overflow-x: auto; margin-bottom: 25px; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th { background: var(--hospital-navy); color: white; padding: 12px; font-size: 13px; text-transform: uppercase; }
-        td { border: 1px solid var(--border-color); }
-        td input { width: 100%; border: none; background: transparent; padding: 10px; box-sizing: border-box; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
+        /* Table Design */
+        .table-wrapper { overflow-x: auto; margin: 20px 0; border-radius: 8px; border: 1px solid #eee; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--hospital-navy); color: white; padding: 12px; font-size: 13px; text-align: left; }
+        td { border: 1px solid #eee; }
+        td input { width: 100%; border: none; padding: 12px; outline: none; background: transparent; }
 
         /* Signatures */
-        .sig-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .sig-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 25px; }
         .sig-box { text-align: center; }
-        .canvas-container { border: 1px dashed #333; background: #fff; margin-bottom: 8px; border-radius: 4px; }
-        canvas { width: 100%; height: 120px; touch-action: none; }
-        .clear-btn { font-size: 10px; color: #cc0000; background: none; border: 1px solid #cc0000; padding: 3px 8px; cursor: pointer; border-radius: 3px; font-weight: bold; }
+        .canvas-box { border: 1px solid #999; background: #fff; border-radius: 6px; cursor: crosshair; }
+        canvas { width: 100%; height: 140px; touch-action: none; }
+        .clear-btn { margin-top: 8px; font-size: 12px; color: #d00; background: none; border: 1px solid #d00; padding: 4px 10px; cursor: pointer; border-radius: 4px; }
 
         .submit-btn { 
             width: 100%; 
             background: var(--hospital-green); 
             color: white; 
             border: none; 
-            padding: 18px; 
-            font-size: 1.1rem; 
+            padding: 20px; 
+            font-size: 1.2rem; 
             font-weight: bold; 
-            border-radius: 6px; 
+            border-radius: 10px; 
             cursor: pointer; 
-            margin-top: 30px;
-            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+            margin-top: 25px;
+            transition: 0.3s;
         }
-        .submit-btn:hover { background: #218838; }
+        .submit-btn:active { transform: scale(0.98); background: #1e7e34; }
 
-        @media (max-width: 600px) {
-            .container { padding: 15px; }
-            .header h1 { font-size: 1.2rem; }
-        }
-
-        /* Aesthetics for Logo Placeholder */
-        .logo-placeholder { 
-            font-weight: bold; 
-            font-size: 24px; 
-            color: var(--hospital-navy); 
-            margin-bottom: 10px; 
-            display: block; 
-        }
+        @media print { .submit-btn, .clear-btn, input[type="file"] { display: none; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <img src="https://tdmh-cqi.github.io/csr/tdmh-logo.png" alt="TDMH Logo" class="logo" onerror="this.style.display='none'; document.getElementById('alt-logo').style.display='block';">
-        <div id="alt-logo" class="logo-placeholder" style="display:none;">TAYTAY DOCTORS</div>
-        
+        <img src="tdmh-logo.png" alt="Hospital Logo" class="logo">
         <h1>Central Supply Room 2026</h1>
         <p>REQUISITION AND ISSUE SLIP</p>
     </div>
@@ -115,12 +104,12 @@
     </div>
 
     <div class="grid">
-        <div class="input-group"><label>Department</label><input type="text" id="dept" placeholder="Enter Requesting Unit"></div>
-        <div class="input-group"><label>Email Address</label><input type="email" id="email" placeholder="official@hospital.com"></div>
+        <div class="input-group"><label>Department</label><input type="text" id="dept" placeholder="Requesting Unit"></div>
+        <div class="input-group"><label>Email</label><input type="email" id="email" placeholder="official@hospital.com"></div>
     </div>
 
     <div class="grid">
-        <div class="input-group"><label>Date Requested</label><input type="date" id="dateInput"></div>
+        <div class="input-group"><label>Date</label><input type="date" id="dateInput"></div>
         <div class="input-group"><label>Time</label><input type="time" id="timeInput"></div>
     </div>
 
@@ -128,58 +117,48 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 50px;">No.</th>
+                    <th style="width: 40px;">#</th>
                     <th>Item Description</th>
-                    <th style="width: 150px;">Qty / Unit</th>
+                    <th style="width: 130px;">Qty/Unit</th>
                 </tr>
             </thead>
-            <tbody id="tableBody">
-                </tbody>
+            <tbody id="tableBody"></tbody>
         </table>
     </div>
 
     <div class="grid">
-        <div class="input-group">
-            <label>Reference Image Upload</label>
-            <input type="file" id="imageInput" accept="image/*" capture="environment">
-        </div>
+        <div class="input-group"><label>Reference Photo</label><input type="file" id="imageInput" accept="image/*" capture="environment"></div>
     </div>
 
     <div class="grid">
-        <div class="input-group"><label>Requested By (Full Name)</label><input type="text" id="reqBy"></div>
-        <div class="input-group"><label>Received By (Full Name)</label><input type="text" id="recBy"></div>
+        <div class="input-group"><label>Requested By</label><input type="text" id="reqBy"></div>
+        <div class="input-group"><label>Received By</label><input type="text" id="recBy"></div>
     </div>
 
-    <div class="sig-section">
+    <div class="sig-row">
         <div class="sig-box">
             <label>HOD Signature</label>
-            <div class="canvas-container"><canvas id="sigHOD"></canvas></div>
-            <button class="clear-btn" onclick="clearSig('sigHOD')">CLEAR SIGNATURE</button>
+            <div class="canvas-box"><canvas id="sigHOD"></canvas></div>
+            <button class="clear-btn" type="button" onclick="clearSig('sigHOD')">CLEAR</button>
         </div>
         <div class="sig-box">
             <label>Admin Signature</label>
-            <div class="canvas-container"><canvas id="sigAdmin"></canvas></div>
-            <button class="clear-btn" onclick="clearSig('sigAdmin')">CLEAR SIGNATURE</button>
+            <div class="canvas-box"><canvas id="sigAdmin"></canvas></div>
+            <button class="clear-btn" type="button" onclick="clearSig('sigAdmin')">CLEAR</button>
         </div>
     </div>
 
-    <button id="submitBtn" class="submit-btn" onclick="submitForm()">PROCEED & SUBMIT REQUEST</button>
+    <button id="submitBtn" class="submit-btn" onclick="submitForm()">SUBMIT REQUISITION</button>
 </div>
 
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzlwyOqw2rNenrrU6o7jw5eiRpqEbHiZFjQOfqnfA37SmXY4_ufoZcSaDqOX-5mNLM6/exec';
 
-    // Generate Table Rows
     const tbody = document.getElementById('tableBody');
     for(let i=1; i<=10; i++){
-        tbody.innerHTML += `<tr>
-            <td style="text-align:center; font-size:12px; font-weight:bold;">${i}</td>
-            <td><input type="text" class="item-d" placeholder="..."></td>
-            <td><input type="text" class="item-q" placeholder="..."></td>
-        </tr>`;
+        tbody.innerHTML += `<tr><td style="text-align:center; font-weight:bold;">${i}</td><td><input type="text" class="item-d"></td><td><input type="text" class="item-q"></td></tr>`;
     }
 
-    // Auto-fill Logic
     let currentId = parseInt(localStorage.getItem('csr_id')) || 1;
     document.getElementById('reqNumber').innerText = "2026-" + currentId.toString().padStart(4, '0');
     document.getElementById('dateInput').valueAsDate = new Date();
@@ -187,7 +166,7 @@
 
     async function submitForm() {
         const btn = document.getElementById('submitBtn');
-        btn.innerText = "Securing Connection...";
+        btn.innerText = "Processing...";
         btn.disabled = true;
 
         let descs = [], qtys = [];
@@ -196,8 +175,6 @@
             let q = tr.querySelector('.item-q').value;
             if(d) { descs.push(d); qtys.push(q || "0"); }
         });
-
-        if(descs.length === 0) { alert("Please add at least one item."); btn.disabled = false; btn.innerText = "PROCEED & SUBMIT REQUEST"; return; }
 
         let refBase64 = "";
         const file = document.getElementById('imageInput').files[0];
@@ -227,15 +204,14 @@
         fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
         .then(() => {
             localStorage.setItem('csr_id', currentId + 1);
-            alert("SUCCESS: Requisition slip sent to Spreadsheet.");
+            alert("SUCCESS: Requisition submitted.");
             location.reload();
         }).catch(() => {
-            alert("Connection Error. Check your internet.");
+            alert("Connection Error.");
             btn.disabled = false;
         });
     }
 
-    // Signature Logic
     function setupCanvas(id) {
         const c = document.getElementById(id);
         const ctx = c.getContext("2d");
@@ -245,29 +221,22 @@
         c.height = rect.height * dpr;
         ctx.scale(dpr, dpr);
         ctx.lineWidth = 2;
-        ctx.lineCap = "round";
         ctx.strokeStyle = "#002147";
 
         let draw = false;
         const getPos = (e) => {
             const r = c.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: clientX - r.left, y: clientY - r.top };
+            const cx = e.touches ? e.touches[0].clientX : e.clientX;
+            const cy = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: cx - r.left, y: cy - r.top };
         };
         const start = (e) => { draw=true; ctx.beginPath(); const p=getPos(e); ctx.moveTo(p.x, p.y); };
         const move = (e) => { if(!draw) return; const p=getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); e.preventDefault(); };
-        
         c.addEventListener("mousedown", start); c.addEventListener("mousemove", move);
         c.addEventListener("touchstart", start); c.addEventListener("touchmove", move);
         window.addEventListener("mouseup", () => draw=false);
-        window.addEventListener("touchend", () => draw=false);
     }
-    function clearSig(id) { 
-        const c = document.getElementById(id);
-        const ctx = c.getContext("2d");
-        ctx.clearRect(0,0,c.width,c.height);
-    }
+    function clearSig(id) { const c=document.getElementById(id); c.getContext("2d").clearRect(0,0,c.width,c.height); }
     setupCanvas('sigHOD'); setupCanvas('sigAdmin');
 </script>
 
