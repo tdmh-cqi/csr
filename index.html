@@ -167,8 +167,8 @@
 </div>
 
 <script>
-    // CHECK THIS URL AFTER DEPLOYING YOUR SCRIPT!
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzlwyOqw2rNenrrU6o7jw5eiRpqEbHiZFjQOfqnfA37SmXY4_ufoZcSaDqOX-5mNLM6/exec';
+    // YOUR NEW DEPLOYMENT URL IS INSERTED HERE:
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZwibE-gsshjVXOIIl6KrAsqx-3J6lNwRhbK9GK3JEm-2Sf1jbIT0rzw7ZwIoZeE4yWQ/exec';
 
     const tbody = document.getElementById('tableBody');
     for(let i=1; i<=10; i++){
@@ -184,6 +184,7 @@
         const btn1 = document.getElementById('submitBtn');
         const btn2 = document.getElementById('printBtn');
         
+        // Disable buttons to prevent double-submit
         btn1.disabled = true; btn1.innerText = "Processing...";
         btn2.disabled = true; btn2.innerText = "Processing...";
 
@@ -225,11 +226,12 @@
             
             if (shouldPrint) {
                 alert("SUCCESS: Request Submitted. Opening Print View...");
-                // Hide buttons for print view
+                // Hide buttons for the print view
                 btn1.style.display = 'none';
                 btn2.style.display = 'none';
                 document.querySelectorAll('.clear-btn').forEach(b => b.style.display = 'none');
                 
+                // Trigger Print
                 window.print();
                 
                 // Reload after a short delay
