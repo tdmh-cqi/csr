@@ -2,316 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSR Request Form</title>
     <style>
-        :root {
-            --primary-red: #e63946;
-            --navy: #1d3557;
-            --bg-glass: rgba(255, 255, 255, 0.95);
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            margin: 0;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
+        :root { --primary-red: #d32f2f; --hospital-blue: #2c3e50; --border-color: #bdc3c7; }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #eaeff2; margin: 0; padding: 10px; }
+        
+        .form-container { 
+            max-width: 900px; margin: 20px auto; background: #fff; 
+            padding: 20px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
         }
 
         /* Aesthetic Header */
-        .form-card {
-            width: 100%;
-            max-width: 600px;
-            background: var(--bg-glass);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            padding: 25px;
-            backdrop-filter: blur(10px);
+        .header-section { 
+            text-align: center; border-bottom: 4px double var(--hospital-blue); 
+            padding-bottom: 15px; margin-bottom: 25px; position: relative;
+        }
+        .header-section h1 { 
+            margin: 0; color: var(--hospital-blue); letter-spacing: 2px; 
+            text-transform: uppercase; font-size: 24px; 
+        }
+        .header-section p { margin: 5px 0 0; color: #7f8c8d; font-style: italic; }
+        .form-no { 
+            color: var(--primary-red); font-weight: bold; font-size: 1.1em; 
+            position: absolute; top: 0; right: 0; 
         }
 
-        .header-section {
-            text-align: center;
-            border-bottom: 2px solid #eee;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
+        /* Layout */
+        .input-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
+        .input-group { flex: 1; min-width: 250px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #34495e; font-size: 0.9em; }
+        input[type="text"], input[type="date"], input[type="time"], input[type="file"] {
+            width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box;
         }
 
-        .header-section h1 {
-            margin: 0;
-            font-size: 28px;
-            color: var(--navy);
-            letter-spacing: -1px;
-            text-transform: uppercase;
-        }
-
-        .header-section p {
-            margin: 5px 0;
-            color: #666;
-            font-weight: 500;
-        }
-
-        .form-no-badge {
-            display: inline-block;
-            background: #ffe5e5;
-            color: var(--primary-red);
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        /* Mobile Responsive Grid */
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .input-group {
-            flex: 1;
-            min-width: 250px; /* Forces stack on small phones */
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--navy);
-            margin-bottom: 6px;
-            margin-left: 2px;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1.5px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px; /* Prevents iOS auto-zoom on focus */
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        input:focus {
-            border-color: var(--navy);
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(29, 53, 87, 0.1);
-        }
+        /* Item Table */
+        .table-responsive { overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th { background: var(--hospital-blue); color: white; padding: 10px; text-align: left; }
+        td { border: 1px solid #ecf0f1; padding: 5px; }
+        .td-num { width: 30px; text-align: center; color: #95a5a6; }
+        table input { border: none; width: 100%; padding: 8px; box-sizing: border-box; outline: none; }
+        table tr:nth-child(even) { background: #f9f9f9; }
 
         /* Signature Pads */
-        .sig-box {
-            background: #fff;
-            border: 1.5px solid #e0e0e0;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 5px;
+        .sig-flex { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 30px; }
+        .sig-box { flex: 1; min-width: 300px; text-align: center; }
+        .canvas-wrap { border: 2px solid #34495e; background: #fff; border-radius: 4px; margin-bottom: 10px; touch-action: none; }
+        canvas { width: 100%; height: 150px; cursor: crosshair; }
+        .clear-link { color: var(--primary-red); cursor: pointer; font-size: 0.8em; text-decoration: underline; }
+
+        .btn-submit { 
+            display: block; width: 100%; padding: 15px; background: #27ae60; 
+            color: white; border: none; border-radius: 6px; font-size: 1.2em; 
+            font-weight: bold; cursor: pointer; margin-top: 30px; 
         }
 
-        canvas {
-            width: 100%;
-            height: 140px;
-            touch-action: none; /* Critical for mobile drawing */
-            cursor: url('https://img.icons8.com/ios-filled/20/000000/pen.png'), crosshair;
-        }
-
-        .sig-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            background: #f8f9fa;
-            border-top: 1px solid #eee;
-        }
-
-        .btn-clear {
-            background: none;
-            border: none;
-            color: #999;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .submit-area {
-            margin-top: 30px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            background: var(--navy);
-            color: white;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(29, 53, 87, 0.3);
-            transition: transform 0.2s;
-        }
-
-        .btn-submit:active {
-            transform: scale(0.98);
-        }
-
-        /* Hide print UI elements */
-        @media print {
-            .btn-clear, .btn-submit, input[type="file"] { display: none; }
-            body { background: white; padding: 0; }
-            .form-card { box-shadow: none; border: none; width: 100%; }
+        /* Responsive Mobile Tweak */
+        @media (max-width: 600px) {
+            .header-section h1 { font-size: 18px; }
+            .form-no { position: static; display: block; margin-bottom: 10px; text-align: left; }
+            .form-container { padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-<div class="form-card">
+<div class="form-container">
     <div class="header-section">
-        <h1>Central Supply Room</h1>
-        <p>Medical Equipment & Supplies Request</p>
-        <div class="form-no-badge">NO: <span id="formId">...</span></div>
-    </div>
-
-    <form id="csrForm">
-        <div class="input-group" style="margin-bottom: 15px;">
-            <label>Requesting Department</label>
-            <input type="text" placeholder="e.g. Emergency Room" required>
-        </div>
-
-        <div class="form-row">
-            <div class="input-group">
-                <label>Date</label>
-                <input type="date" id="dateInput">
-            </div>
-            <div class="input-group">
-                <label>Time</label>
-                <input type="time" id="timeInput">
-            </div>
-        </div>
-
-        <div class="input-group" style="margin-bottom: 15px;">
-            <label>Item Description</label>
-            <textarea rows="2" placeholder="List items requested..."></textarea>
-        </div>
-
-        <div class="form-row">
-            <div class="input-group">
-                <label>Quantity/Unit</label>
-                <input type="text" placeholder="e.g. 50 pcs">
-            </div>
-            <div class="input-group">
-                <label>Requested By</label>
-                <input type="text" placeholder="Full Name">
-            </div>
-        </div>
-
-        <div class="input-group" style="margin-bottom: 15px;">
-            <label>Upload Reference (Image)</label>
-            <input type="file" accept="image/*" style="border: none; padding: 5px 0;">
-        </div>
-
-        <div class="input-group" style="margin-bottom: 25px;">
-            <label>Received By</label>
-            <input type="text" placeholder="Receiver Name">
-        </div>
-
-        <label>Head of the Department Signature</label>
-        <div class="sig-box">
-            <canvas id="canvas-hod"></canvas>
-            <div class="sig-controls">
-                <span style="font-size: 11px; color: #999;">Sign inside the box</span>
-                <button type="button" class="btn-clear" onclick="clearSig('canvas-hod')">CLEAR</button>
-            </div>
-        </div>
-
-        <br>
-
-        <label>Approved by Hospital Administrator/CQI</label>
-        <div class="sig-box">
-            <canvas id="canvas-admin"></canvas>
-            <div class="sig-controls">
-                <span style="font-size: 11px; color: #999;">Sign inside the box</span>
-                <button type="button" class="btn-clear" onclick="clearSig('canvas-admin')">CLEAR</button>
-            </div>
-        </div>
-
-        <div class="submit-area">
-            <button type="button" class="btn-submit" onclick="window.print()">Submit & Print Request</button>
-        </div>
-    </form>
-</div>
-
-<script>
-    // Automated Form ID
-    document.getElementById('formId').innerText = 'CSR-' + Math.floor(1000 + Math.random() * 9000);
-
-    // Auto-fill Date/Time
-    const now = new Date();
-    document.getElementById('dateInput').valueAsDate = now;
-    document.getElementById('timeInput').value = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-
-    // Enhanced Signature Pad Logic
-    function setupSignature(canvasId) {
-        const canvas = document.getElementById(canvasId);
-        const ctx = canvas.getContext("2d");
-        
-        // Mobile-friendly Resolution
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = canvas.offsetWidth * dpr;
-        canvas.height = canvas.offsetHeight * dpr;
-        ctx.scale(dpr, dpr);
-
-        let drawing = false;
-
-        const getXY = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: clientX - rect.left, y: clientY - rect.top };
-        };
-
-        const start = (e) => {
-            drawing = true;
-            const pos = getXY(e);
-            ctx.beginPath();
-            ctx.moveTo(pos.x, pos.y);
-            if(e.type === 'touchstart') e.preventDefault();
-        };
-
-        const move = (e) => {
-            if(!drawing) return;
-            const pos = getXY(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.lineWidth = 2;
-            ctx.lineCap = "round";
-            ctx.strokeStyle = "#1d3557";
-            ctx.stroke();
-            if(e.type === 'touchmove') e.preventDefault();
-        };
-
-        canvas.addEventListener('mousedown', start);
-        canvas.addEventListener('mousemove', move);
-        window.addEventListener('mouseup', () => drawing = false);
-
-        canvas.addEventListener('touchstart', start, {passive: false});
-        canvas.addEventListener('touchmove', move, {passive: false});
-        canvas.addEventListener('touchend', () => drawing = false);
-    }
-
-    function clearSig(id) {
-        const canvas = document.getElementById(id);
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    window.onload = () => {
-        setupSignature('canvas-hod');
-        setupSignature('canvas-admin');
-    };
-</script>
-
-</body>
-</html>
+        <div class="form-
