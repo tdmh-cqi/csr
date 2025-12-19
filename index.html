@@ -4,149 +4,183 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Form - Central Supply Room</title>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; background-color: #f4f4f4; }
         .form-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         
         header { text-align: center; border-bottom: 2px solid #333; margin-bottom: 20px; padding-bottom: 10px; }
+        h1 { margin: 0; color: #2c3e50; }
         .form-number { color: red; font-weight: bold; float: right; font-size: 1.2em; }
         
-        .grid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        
-        .signature-wrapper { border: 1px solid #000; background: #fafafa; margin-top: 5px; position: relative; }
-        canvas { width: 100%; height: 150px; cursor: crosshair; }
-        .clear-btn { margin-top: 5px; background: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px; font-size: 12px; }
-        
-        .submit-section { margin-top: 30px; text-align: center; }
-        .btn-submit { background: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        input[type="text"], input[type="date"], input[type="time"], input[type="number"], textarea, input[type="file"] {
+            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
+
+        .signature-wrapper { border: 2px dashed #999; background: #fafafa; margin-top: 10px; position: relative; }
+        canvas { display: block; width: 100%; height: 150px; cursor: crosshair; }
+        .sig-label { font-size: 0.8em; color: #555; text-align: center; padding: 5px; border-top: 1px solid #eee; }
+        .clear-btn { margin-top: 5px; padding: 5px 10px; font-size: 12px; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 3px; }
+
+        .submit-btn { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 5px; font-size: 1.1em; cursor: pointer; margin-top: 20px; }
+        .submit-btn:hover { background: #219150; }
+
+        .row { display: flex; gap: 20px; }
+        .col { flex: 1; }
     </style>
 </head>
 <body>
 
 <div class="form-container">
     <header>
-        <span class="form-number">Form No: <span id="formNum">0001</span></span>
+        <div class="form-number">No: <span id="auto-number"></span></div>
         <h1>Central Supply Room</h1>
-        <h2>Request Form</h2>
+        <h3>Request Form</h3>
     </header>
 
     <form id="requestForm">
-        <div class="grid-row">
-            <div>
+        <div class="row">
+            <div class="form-group col">
                 <label>Requesting Department</label>
                 <input type="text" required>
             </div>
-            <div>
-                <label>Date & Time</label>
-                <input type="datetime-local" id="currentDateTime" required>
+        </div>
+
+        <div class="row">
+            <div class="form-group col">
+                <label>Date</label>
+                <input type="date" id="currentDate" required>
+            </div>
+            <div class="form-group col">
+                <label>Time</label>
+                <input type="time" id="currentTime" required>
             </div>
         </div>
 
-        <div class="grid-row">
-            <div style="grid-column: span 2;">
-                <label>Item Description</label>
-                <textarea rows="3" required></textarea>
-            </div>
+        <div class="form-group">
+            <label>Item Description</label>
+            <textarea rows="3" required></textarea>
         </div>
 
-        <div class="grid-row">
-            <div>
+        <div class="row">
+            <div class="form-group col">
                 <label>Quantity / Unit</label>
-                <input type="text" placeholder="e.g. 50 Boxes" required>
+                <input type="text" placeholder="e.g. 10 boxes" required>
             </div>
-            <div>
-                <label>Upload Image Reference</label>
-                <input type="file" accept="image/*">
+            <div class="form-group col">
+                <label>Requested By</label>
+                <input type="text" required>
             </div>
         </div>
 
-        <div class="grid-row">
-            <div>
-                <label>Requested By</label>
-                <input type="text" placeholder="Print Name" required>
-            </div>
-            <div>
-                <label>Received By</label>
-                <input type="text" placeholder="CSR Personnel Name">
-            </div>
+        <div class="form-group">
+            <label>Upload Image (Reference/PO)</label>
+            <input type="file" accept="image/*">
+        </div>
+
+        <div class="form-group">
+            <label>Received By</label>
+            <input type="text">
         </div>
 
         <hr>
 
-        <div class="grid-row">
-            <div>
-                <label>Head of the Department (Signature)</label>
+        <div class="row">
+            <div class="form-group col">
+                <label>Head of Department</label>
                 <div class="signature-wrapper">
-                    <canvas id="sig-dept-head"></canvas>
+                    <canvas id="sig-hod"></canvas>
+                    <div class="sig-label">Draw Signature Above</div>
                 </div>
-                <button type="button" class="clear-btn" onclick="clearSignature(pad1)">Clear Signature</button>
+                <button type="button" class="clear-btn" onclick="clearCanvas('sig-hod')">Clear</button>
             </div>
-            <div>
-                <label>Approved by Hospital Administrator/CQI</label>
+
+            <div class="form-group col">
+                <label>Approved by: Hospital Administrator/CQI</label>
                 <div class="signature-wrapper">
                     <canvas id="sig-admin"></canvas>
+                    <div class="sig-label">Draw Signature Above</div>
                 </div>
-                <button type="button" class="clear-btn" onclick="clearSignature(pad2)">Clear Signature</button>
+                <button type="button" class="clear-btn" onclick="clearCanvas('sig-admin')">Clear</button>
             </div>
         </div>
 
-        <div class="submit-section">
-            <button type="submit" class="btn-submit">Submit Request</button>
-        </div>
+        <button type="submit" class="submit-btn">Submit Request</button>
     </form>
 </div>
 
 <script>
-    // 1. Automated Form Number (Local Storage logic)
-    let lastNum = localStorage.getItem('csr_form_count') || 1000;
-    let nextNum = parseInt(lastNum) + 1;
-    document.getElementById('formNum').innerText = nextNum;
+    // 1. Auto-generate Red Form Number (Simulated using timestamp)
+    document.getElementById('auto-number').innerText = 'CSR-' + Math.floor(Date.now() / 1000);
 
-    // 2. Set Current Date/Time
+    // 2. Set default Date and Time
     const now = new Date();
-    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    document.getElementById('currentDateTime').value = now.toISOString().slice(0, 16);
+    document.getElementById('currentDate').value = now.toISOString().split('T')[0];
+    document.getElementById('currentTime').value = now.toTimeString().substring(0,5);
 
-    // 3. Initialize Signature Pads
-    const canvas1 = document.getElementById('sig-dept-head');
-    const canvas2 = document.getElementById('sig-admin');
-    const pad1 = new SignaturePad(canvas1);
-    const pad2 = new SignaturePad(canvas2);
+    // 3. Signature Logic
+    function setupCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext("2d");
+        let drawing = false;
 
-    function clearSignature(pad) {
-        pad.clear();
-    }
+        // Fit canvas to container width
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 150;
 
-    // 4. Handle Submit
-    document.getElementById('requestForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (pad1.isEmpty() || pad2.isEmpty()) {
-            alert("Please ensure all required signatures are provided.");
-            return;
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX || e.touches[0].clientX) - rect.left,
+                y: (e.clientY || e.touches[0].clientY) - rect.top
+            };
         }
 
-        // Increment form number for next time
-        localStorage.setItem('csr_form_count', nextNum);
-        
-        alert("Request Submitted Successfully! Form No: " + nextNum);
-        location.reload(); 
-    });
+        function start(e) {
+            drawing = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            e.preventDefault();
+        }
 
-    // Adjust canvas size for resolution
-    window.onresize = resizeCanvases;
-    function resizeCanvases() {
-        [canvas1, canvas2].forEach(canvas => {
-            const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
-            canvas.getContext("2d").scale(ratio, ratio);
-        });
+        function draw(e) {
+            if (!drawing) return;
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            e.preventDefault();
+        }
+
+        function stop() { drawing = false; }
+
+        canvas.addEventListener("mousedown", start);
+        canvas.addEventListener("mousemove", draw);
+        window.addEventListener("mouseup", stop);
+
+        canvas.addEventListener("touchstart", start);
+        canvas.addEventListener("touchmove", draw);
+        canvas.addEventListener("touchend", stop);
     }
-    resizeCanvases();
+
+    function clearCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Initialize canvases
+    window.onload = () => {
+        setupCanvas('sig-hod');
+        setupCanvas('sig-admin');
+    };
+
+    // Form Submit handling
+    document.getElementById('requestForm').onsubmit = (e) => {
+        e.preventDefault();
+        alert("Form Submitted! (In a real app, this data would be sent to a database)");
+    };
 </script>
 
 </body>
