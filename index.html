@@ -2,168 +2,314 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central Supply Room - Request Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CSR Request Form</title>
     <style>
-        :root { --primary-red: #d32f2f; --border-grey: #ccc; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; padding: 20px; }
-        .form-container { max-width: 850px; margin: auto; background: #fff; padding: 40px; border: 1px solid #ddd; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        
-        /* Header Styling */
-        .header-table { width: 100%; border-bottom: 3px solid #333; margin-bottom: 20px; }
-        .form-title { font-size: 24px; font-weight: bold; text-transform: uppercase; }
-        .form-no { color: var(--primary-red); font-size: 18px; font-weight: bold; text-align: right; }
+        :root {
+            --primary-red: #e63946;
+            --navy: #1d3557;
+            --bg-glass: rgba(255, 255, 255, 0.95);
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
 
-        /* Layout Grid */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
-        .full-width { grid-column: span 2; }
-        
-        label { display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-grey); border-radius: 4px; box-sizing: border-box; }
-        
-        /* Signature Box */
-        .sig-container { border: 1px solid #999; background: #fdfdfd; position: relative; margin-top: 5px; }
-        canvas { width: 100%; height: 120px; display: block; touch-action: none; cursor: crosshair; }
-        .sig-footer { background: #eee; font-size: 11px; text-align: center; padding: 4px; border-top: 1px solid #ccc; }
-        
-        .btn-clear { background: #f44336; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 10px; cursor: pointer; margin: 5px; }
-        .btn-submit { background: #2e7d32; color: white; border: none; padding: 15px; width: 100%; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Aesthetic Header */
+        .form-card {
+            width: 100%;
+            max-width: 600px;
+            background: var(--bg-glass);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-section {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 28px;
+            color: var(--navy);
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .header-section p {
+            margin: 5px 0;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .form-no-badge {
+            display: inline-block;
+            background: #ffe5e5;
+            color: var(--primary-red);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Mobile Responsive Grid */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 250px; /* Forces stack on small phones */
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 6px;
+            margin-left: 2px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px; /* Prevents iOS auto-zoom on focus */
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: var(--navy);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(29, 53, 87, 0.1);
+        }
+
+        /* Signature Pads */
+        .sig-box {
+            background: #fff;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 140px;
+            touch-action: none; /* Critical for mobile drawing */
+            cursor: url('https://img.icons8.com/ios-filled/20/000000/pen.png'), crosshair;
+        }
+
+        .sig-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-clear {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .submit-area {
+            margin-top: 30px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--navy);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(29, 53, 87, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        /* Hide print UI elements */
         @media print {
             .btn-clear, .btn-submit, input[type="file"] { display: none; }
             body { background: white; padding: 0; }
-            .form-container { box-shadow: none; border: none; }
+            .form-card { box-shadow: none; border: none; width: 100%; }
         }
     </style>
 </head>
 <body>
 
-<div class="form-container" id="printableArea">
-    <table class="header-table">
-        <tr>
-            <td class="form-title">Central Supply Room</td>
-            <td class="form-no">No: <span id="formId">0000</span></td>
-        </tr>
-    </table>
+<div class="form-card">
+    <div class="header-section">
+        <h1>Central Supply Room</h1>
+        <p>Medical Equipment & Supplies Request</p>
+        <div class="form-no-badge">NO: <span id="formId">...</span></div>
+    </div>
 
-    <div class="grid">
-        <div class="form-group full-width">
+    <form id="csrForm">
+        <div class="input-group" style="margin-bottom: 15px;">
             <label>Requesting Department</label>
-            <input type="text" id="dept" placeholder="Enter Department Name">
-        </div>
-        
-        <div class="form-group">
-            <label>Date</label>
-            <input type="date" id="reqDate">
-        </div>
-        <div class="form-group">
-            <label>Time</label>
-            <input type="time" id="reqTime">
+            <input type="text" placeholder="e.g. Emergency Room" required>
         </div>
 
-        <div class="form-group full-width">
+        <div class="form-row">
+            <div class="input-group">
+                <label>Date</label>
+                <input type="date" id="dateInput">
+            </div>
+            <div class="input-group">
+                <label>Time</label>
+                <input type="time" id="timeInput">
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 15px;">
             <label>Item Description</label>
-            <textarea id="desc" rows="3"></textarea>
+            <textarea rows="2" placeholder="List items requested..."></textarea>
         </div>
 
-        <div class="form-group">
-            <label>Quantity / Unit</label>
-            <input type="text" id="qty">
-        </div>
-        <div class="form-group">
-            <label>Requested By</label>
-            <input type="text" id="reqBy">
+        <div class="form-row">
+            <div class="input-group">
+                <label>Quantity/Unit</label>
+                <input type="text" placeholder="e.g. 50 pcs">
+            </div>
+            <div class="input-group">
+                <label>Requested By</label>
+                <input type="text" placeholder="Full Name">
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Upload Image</label>
-            <input type="file" id="imgUpload">
+        <div class="input-group" style="margin-bottom: 15px;">
+            <label>Upload Reference (Image)</label>
+            <input type="file" accept="image/*" style="border: none; padding: 5px 0;">
         </div>
-        <div class="form-group">
+
+        <div class="input-group" style="margin-bottom: 25px;">
             <label>Received By</label>
-            <input type="text" id="recBy">
+            <input type="text" placeholder="Receiver Name">
         </div>
-    </div>
 
-    <div class="grid">
-        <div class="form-group">
-            <label>Head of the Department</label>
-            <div class="sig-container">
-                <canvas id="canvas-hod"></canvas>
-                <div class="sig-footer">Draw Signature Above</div>
+        <label>Head of the Department Signature</label>
+        <div class="sig-box">
+            <canvas id="canvas-hod"></canvas>
+            <div class="sig-controls">
+                <span style="font-size: 11px; color: #999;">Sign inside the box</span>
+                <button type="button" class="btn-clear" onclick="clearSig('canvas-hod')">CLEAR</button>
             </div>
-            <button class="btn-clear" onclick="clearCanvas('canvas-hod')">Clear Space</button>
         </div>
 
-        <div class="form-group">
-            <label>Approved by Hospital Administrator/CQI</label>
-            <div class="sig-container">
-                <canvas id="canvas-admin"></canvas>
-                <div class="sig-footer">Draw Signature Above</div>
+        <br>
+
+        <label>Approved by Hospital Administrator/CQI</label>
+        <div class="sig-box">
+            <canvas id="canvas-admin"></canvas>
+            <div class="sig-controls">
+                <span style="font-size: 11px; color: #999;">Sign inside the box</span>
+                <button type="button" class="btn-clear" onclick="clearSig('canvas-admin')">CLEAR</button>
             </div>
-            <button class="btn-clear" onclick="clearCanvas('canvas-admin')">Clear Space</button>
         </div>
-    </div>
 
-    <button type="button" class="btn-submit" onclick="window.print()">Print or Save as PDF</button>
+        <div class="submit-area">
+            <button type="button" class="btn-submit" onclick="window.print()">Submit & Print Request</button>
+        </div>
+    </form>
 </div>
 
 <script>
-    // 1. Generate Red Automated Number
-    const randomNo = Math.floor(1000 + Math.random() * 9000);
-    document.getElementById('formId').innerText = "CSR-" + new Date().getFullYear() + "-" + randomNo;
+    // Automated Form ID
+    document.getElementById('formId').innerText = 'CSR-' + Math.floor(1000 + Math.random() * 9000);
 
-    // 2. Set Today's Date
-    document.getElementById('reqDate').valueAsDate = new Date();
+    // Auto-fill Date/Time
+    const now = new Date();
+    document.getElementById('dateInput').valueAsDate = now;
+    document.getElementById('timeInput').value = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
 
-    // 3. Signature Logic
-    function initSignPad(id) {
-        const canvas = document.getElementById(id);
+    // Enhanced Signature Pad Logic
+    function setupSignature(canvasId) {
+        const canvas = document.getElementById(canvasId);
         const ctx = canvas.getContext("2d");
+        
+        // Mobile-friendly Resolution
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = canvas.offsetWidth * dpr;
+        canvas.height = canvas.offsetHeight * dpr;
+        ctx.scale(dpr, dpr);
+
         let drawing = false;
 
-        // Correct for high DPI screens
-        const ratio = Math.max(window.devicePixelRatio || 1, 1);
-        canvas.width = canvas.offsetWidth * ratio;
-        canvas.height = canvas.offsetHeight * ratio;
-        ctx.scale(ratio, ratio);
-
-        function getPos(e) {
+        const getXY = (e) => {
             const rect = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             return { x: clientX - rect.left, y: clientY - rect.top };
-        }
+        };
 
-        function start(e) { drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); }
-        function draw(e) { 
-            if(!drawing) return; 
-            const p = getPos(e); 
-            ctx.lineTo(p.x, p.y); 
+        const start = (e) => {
+            drawing = true;
+            const pos = getXY(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            if(e.type === 'touchstart') e.preventDefault();
+        };
+
+        const move = (e) => {
+            if(!drawing) return;
+            const pos = getXY(e);
+            ctx.lineTo(pos.x, pos.y);
             ctx.lineWidth = 2;
             ctx.lineCap = "round";
-            ctx.stroke(); 
-        }
-        function stop() { drawing = false; }
+            ctx.strokeStyle = "#1d3557";
+            ctx.stroke();
+            if(e.type === 'touchmove') e.preventDefault();
+        };
 
-        canvas.addEventListener("mousedown", start);
-        canvas.addEventListener("mousemove", draw);
-        canvas.addEventListener("mouseup", stop);
-        canvas.addEventListener("touchstart", (e) => { start(e); e.preventDefault(); }, {passive: false});
-        canvas.addEventListener("touchmove", (e) => { draw(e); e.preventDefault(); }, {passive: false});
-        canvas.addEventListener("touchend", stop);
+        canvas.addEventListener('mousedown', start);
+        canvas.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', () => drawing = false);
+
+        canvas.addEventListener('touchstart', start, {passive: false});
+        canvas.addEventListener('touchmove', move, {passive: false});
+        canvas.addEventListener('touchend', () => drawing = false);
     }
 
-    function clearCanvas(id) {
+    function clearSig(id) {
         const canvas = document.getElementById(id);
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Initialize both pads
     window.onload = () => {
-        initSignPad('canvas-hod');
-        initSignPad('canvas-admin');
+        setupSignature('canvas-hod');
+        setupSignature('canvas-admin');
     };
 </script>
 
