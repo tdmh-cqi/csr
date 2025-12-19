@@ -43,12 +43,14 @@
             border: none; border-radius: 5px; font-size: 1.1rem; font-weight: bold; 
             cursor: pointer; margin-top: 30px; transition: 0.3s;
         }
+        .btn-submit:hover { background: #218838; }
         .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
 
         @media print {
             .btn-submit, .clear-btn, input[type="file"] { display: none; }
             body { background: white; padding: 0; }
             .form-container { box-shadow: none; border: none; }
+            .canvas-container { border: 1px solid #eee; }
         }
     </style>
 </head>
@@ -67,7 +69,7 @@
             <input type="text" id="dept" placeholder="Enter department name">
         </div>
         <div class="col">
-            <label>Department Email</label>
+            <label>Department Email Address</label>
             <input type="email" id="email" placeholder="dept@hospital.com">
         </div>
     </div>
@@ -127,8 +129,10 @@
 </div>
 
 <script>
+    // REPLACE THIS URL WITH YOUR DEPLOYED APPS SCRIPT WEB APP URL
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZwibE-gsshjVXOIIl6KrAsqx-3J6lNwRhbK9GK3JEm-2Sf1jbIT0rzw7ZwIoZeE4yWQ/exec';
 
+    // Generate Table Rows
     const tbody = document.getElementById('tableBody');
     for (let i = 0; i < 10; i++) {
         tbody.innerHTML += `<tr>
@@ -137,35 +141,54 @@
         </tr>`;
     }
 
+    // Handle Request Numbering
     let currentId = parseInt(localStorage.getItem('csr_last_id')) || 1;
     document.getElementById('reqNumber').innerText = "2026-" + currentId.toString().padStart(4, '0');
 
+    // Default Date and Time
     document.getElementById('dateInput').valueAsDate = new Date();
     document.getElementById('timeInput').value = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
 
     async function submitToSheet() {
         const btn = document.getElementById('submitBtn');
-        btn.innerText = "Processing...";
+        
+        // Basic Validation
+        if(!document.getElementById('dept').value || !document.getElementById('reqBy').value) {
+            alert("Please fill in the Requesting Department and Requested By fields.");
+            return;
+        }
+
+        btn.innerText = "Processing & Saving Signatures...";
         btn.disabled = true;
 
-        let items = [];
+        // 1. Capture Signatures from Canvas
+        const sigHod = document.getElementById('sig-hod').toDataURL("image/png");
+        const sigAdmin = document.getElementById('sig-admin').toDataURL("image/png");
+
+        // 2. Gather Items Data
+        let itemsArr = [];
         document.querySelectorAll('#tableBody tr').forEach(tr => {
             let d = tr.querySelector('.item-desc').value;
             let q = tr.querySelector('.item-qty').value;
-            if(d) items.push(`${d} (${q})`);
+            if(d) itemsArr.push(`${d} (${q})`);
         });
 
+        // 3. Prepare Payload
         const payload = {
             formNum: document.getElementById('reqNumber').innerText,
             dept: document.getElementById('dept').value,
-            email: document.getElementById('email').value, // Added Email
+            email: document.getElementById('email').value,
             date: document.getElementById('dateInput').value,
             time: document.getElementById('timeInput').value,
-            items: items.join(" | "),
-            reqBy: document.getElementById('reqBy').value
+            items: itemsArr.join(" | "),
+            reqBy: document.getElementById('reqBy').value,
+            recBy: document.getElementById('recBy').value,
+            sigHod: sigHod,
+            sigAdmin: sigAdmin
         };
 
         try {
+            // Send to Google Sheets
             await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -173,20 +196,23 @@
             });
             
             localStorage.setItem('csr_last_id', currentId + 1);
-            alert("Sent to Google Sheets! Opening Print Window...");
+            alert("Data and Signatures successfully sent to Google Sheet!");
             window.print();
             location.reload();
         } catch (e) {
-            alert("Error sending data.");
+            console.error(e);
+            alert("An error occurred. Please check the console for details.");
             btn.disabled = false;
             btn.innerText = "SUBMIT & PRINT REQUEST";
         }
     }
 
+    // Canvas Signature Logic
     function initCanvas(id) {
         const canvas = document.getElementById(id);
         const ctx = canvas.getContext("2d");
         let drawing = false;
+        
         const ratio = window.devicePixelRatio || 1;
         canvas.width = canvas.offsetWidth * ratio;
         canvas.height = canvas.offsetHeight * ratio;
@@ -199,8 +225,23 @@
             return { x: cx - r.left, y: cy - r.top };
         };
 
-        const start = (e) => { drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); if(e.touches) e.preventDefault(); };
-        const draw = (e) => { if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.lineWidth=2; ctx.stroke(); if(e.touches) e.preventDefault(); };
+        const start = (e) => { 
+            drawing = true; 
+            ctx.beginPath(); 
+            const p = getPos(e); 
+            ctx.moveTo(p.x, p.y); 
+            if(e.touches) e.preventDefault(); 
+        };
+        const draw = (e) => { 
+            if(!drawing) return; 
+            const p = getPos(e); 
+            ctx.lineTo(p.x, p.y); 
+            ctx.lineWidth = 2; 
+            ctx.lineCap = "round";
+            ctx.strokeStyle = "#000";
+            ctx.stroke(); 
+            if(e.touches) e.preventDefault(); 
+        };
         const stop = () => drawing = false;
 
         canvas.addEventListener("mousedown", start);
@@ -212,8 +253,9 @@
     }
 
     function clearSig(id) {
-        const c = document.getElementById(id);
-        c.getContext("2d").clearRect(0,0,c.width,c.height);
+        const canvas = document.getElementById(id);
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     window.onload = () => { initCanvas('sig-hod'); initCanvas('sig-admin'); };
