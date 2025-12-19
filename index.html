@@ -19,9 +19,9 @@
         td { border: 1px solid #ddd; }
         td input { border: none; background: transparent; padding: 10px; width: 100%; outline: none; }
         .canvas-box { border: 1px solid #333; background: #fff; margin-top: 5px; }
-        canvas { width: 100%; height: 100px; cursor: crosshair; touch-action: none; }
+        canvas { width: 100%; height: 100px; cursor: crosshair; touch-action: none; background: #fff; }
         .submit-btn { width: 100%; padding: 20px; background: #28a745; color: white; border: none; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 5px; }
-        .clear-link { font-size: 11px; color: var(--red); cursor: pointer; text-decoration: underline; background: none; border: none; padding-top: 5px; }
+        .clear-link { font-size: 11px; color: var(--red); cursor: pointer; text-decoration: underline; background: none; border: none; }
         @media print { .submit-btn, .clear-link, input[type="file"] { display: none; } }
     </style>
 </head>
@@ -35,8 +35,8 @@
     </div>
 
     <div class="row">
-        <div class="col" style="flex:2;"><label>Department</label><input type="text" id="dept" placeholder="Enter Dept"></div>
-        <div class="col"><label>Email</label><input type="email" id="email" placeholder="email@hospital.com"></div>
+        <div class="col" style="flex:2;"><label>Department</label><input type="text" id="dept" required></div>
+        <div class="col"><label>Email</label><input type="email" id="email" required></div>
     </div>
 
     <div class="row">
@@ -49,51 +49,48 @@
         <tbody id="tableBody"></tbody>
     </table>
 
-    <div class="row"><div class="col"><label>Upload Reference Image (Col H)</label><input type="file" id="imageInput" accept="image/*"></div></div>
+    <div class="row"><div class="col"><label>Reference Image (H)</label><input type="file" id="imageInput" accept="image/*"></div></div>
 
     <div class="row">
-        <div class="col"><label>Requested By</label><input type="text" id="reqBy" placeholder="Full Name"></div>
-        <div class="col"><label>Received By</label><input type="text" id="recBy" placeholder="Full Name"></div>
+        <div class="col"><label>Requested By</label><input type="text" id="reqBy"></div>
+        <div class="col"><label>Received By</label><input type="text" id="recBy"></div>
     </div>
 
     <div class="row">
         <div class="col">
-            <label>HOD Signature (Col K)</label>
+            <label>HOD Signature (K)</label>
             <div class="canvas-box"><canvas id="sigHOD"></canvas></div>
-            <button class="clear-link" onclick="clearSig('sigHOD')">Clear Signature</button>
+            <button class="clear-link" type="button" onclick="clearSig('sigHOD')">Clear</button>
         </div>
         <div class="col">
-            <label>Admin Signature (Col L)</label>
+            <label>Admin Signature (L)</label>
             <div class="canvas-box"><canvas id="sigAdmin"></canvas></div>
-            <button class="clear-link" onclick="clearSig('sigAdmin')">Clear Signature</button>
+            <button class="clear-link" type="button" onclick="clearSig('sigAdmin')">Clear</button>
         </div>
     </div>
 
-    <button id="submitBtn" class="submit-btn" onclick="submitForm()">SUBMIT & SAVE TO SPREADSHEET</button>
+    <button id="submitBtn" class="submit-btn" onclick="submitForm()">SUBMIT TO SPREADSHEET</button>
 </div>
 
 <script>
-    // YOUR ACTIVE WEB APP URL
+    // 1. USE THE NEW URL FROM YOUR APPS SCRIPT DEPLOYMENT
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzlwyOqw2rNenrrU6o7jw5eiRpqEbHiZFjQOfqnfA37SmXY4_ufoZcSaDqOX-5mNLM6/exec';
 
-    // Generate 10 rows
     const tbody = document.getElementById('tableBody');
     for(let i=0; i<10; i++){
-        tbody.innerHTML += `<tr><td><input type="text" class="item-d" placeholder="..."></td><td><input type="text" class="item-q" placeholder="..."></td></tr>`;
+        tbody.innerHTML += `<tr><td><input type="text" class="item-d"></td><td><input type="text" class="item-q"></td></tr>`;
     }
 
-    // Auto-setup defaults
     let currentId = parseInt(localStorage.getItem('csr_id')) || 1;
     document.getElementById('reqNumber').innerText = "2026-" + currentId.toString().padStart(4, '0');
     document.getElementById('dateInput').valueAsDate = new Date();
-    document.getElementById('timeInput').value = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+    document.getElementById('timeInput').value = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', hour12:false});
 
     async function submitForm() {
         const btn = document.getElementById('submitBtn');
-        btn.innerText = "Processing & Uploading...";
+        btn.innerText = "Processing...";
         btn.disabled = true;
 
-        // Collect Table Items
         const items = Array.from(document.querySelectorAll('#tableBody tr'))
             .map(tr => {
                 const d = tr.querySelector('.item-d').value;
@@ -101,7 +98,6 @@
                 return d ? `${d} (${q})` : null;
             }).filter(x => x).join(" | ");
 
-        // Convert Reference Image to Base64
         let refBase64 = "";
         const file = document.getElementById('imageInput').files[0];
         if(file) {
@@ -126,40 +122,44 @@
             refImage: refBase64
         };
 
-        try {
-            await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+        // Simplified Fetch for Google Apps Script compatibility
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Essential for Apps Script
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(() => {
             localStorage.setItem('csr_id', currentId + 1);
-            alert("SUCCESS: Data sent to Request Tab!");
+            alert("SUCCESS: Data sent to Spreadsheet!");
             window.print();
             location.reload();
-        } catch (error) {
-            alert("Error submitting. Please check your connection.");
+        }).catch(err => {
+            alert("Error connecting to Google Sheets.");
             btn.disabled = false;
-            btn.innerText = "SUBMIT & SAVE TO SPREADSHEET";
-        }
+            btn.innerText = "SUBMIT TO SPREADSHEET";
+        });
     }
 
-    // Canvas Logic
     function setupCanvas(id) {
         const c = document.getElementById(id);
         const ctx = c.getContext("2d");
         let draw = false;
         const pos = (e) => {
             const r = c.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: clientX - r.left, y: clientY - r.top };
+            const x = (e.clientX || e.touches[0].clientX) - r.left;
+            const y = (e.clientY || e.touches[0].clientY) - r.top;
+            return { x, y };
         };
-        const start = (e) => { draw=true; ctx.beginPath(); const p=pos(e); ctx.moveTo(p.x, p.y); };
-        const move = (e) => { if(!draw) return; const p=pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); e.preventDefault(); };
-        c.addEventListener("mousedown", start); c.addEventListener("mousemove", move);
-        c.addEventListener("touchstart", start); c.addEventListener("touchmove", move);
+        c.addEventListener("mousedown", (e) => { draw=true; ctx.beginPath(); const p=pos(e); ctx.moveTo(p.x,p.y); });
+        c.addEventListener("mousemove", (e) => { if(!draw) return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+        c.addEventListener("touchstart", (e) => { draw=true; ctx.beginPath(); const p=pos(e); ctx.moveTo(p.x,p.y); e.preventDefault(); });
+        c.addEventListener("touchmove", (e) => { if(!draw) return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); e.preventDefault(); });
         window.addEventListener("mouseup", () => draw=false);
         window.addEventListener("touchend", () => draw=false);
     }
     function clearSig(id) { const c=document.getElementById(id); c.getContext("2d").clearRect(0,0,c.width,c.height); }
     setupCanvas('sigHOD'); setupCanvas('sigAdmin');
 </script>
-
 </body>
 </html>
