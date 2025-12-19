@@ -21,7 +21,7 @@
         .row { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
         .col { flex: 1; min-width: 200px; }
         label { display: block; font-weight: 600; font-size: 0.85rem; color: #333; margin-bottom: 6px; text-transform: uppercase; }
-        input[type="text"], input[type="date"], input[type="time"] {
+        input[type="text"], input[type="email"], input[type="date"], input[type="time"] {
             width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
         }
 
@@ -45,12 +45,6 @@
         }
         .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
 
-        @media (max-width: 600px) {
-            .header h1 { font-size: 20px; text-align: left; }
-            .form-id { position: static; display: block; margin-top: 10px; }
-            .form-container { padding: 20px; }
-        }
-
         @media print {
             .btn-submit, .clear-btn, input[type="file"] { display: none; }
             body { background: white; padding: 0; }
@@ -72,6 +66,13 @@
             <label>Requesting Department</label>
             <input type="text" id="dept" placeholder="Enter department name">
         </div>
+        <div class="col">
+            <label>Department Email</label>
+            <input type="email" id="email" placeholder="dept@hospital.com">
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col">
             <label>Date</label>
             <input type="date" id="dateInput">
@@ -128,7 +129,6 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyZwibE-gsshjVXOIIl6KrAsqx-3J6lNwRhbK9GK3JEm-2Sf1jbIT0rzw7ZwIoZeE4yWQ/exec';
 
-    // 1. Setup Table Rows
     const tbody = document.getElementById('tableBody');
     for (let i = 0; i < 10; i++) {
         tbody.innerHTML += `<tr>
@@ -137,16 +137,12 @@
         </tr>`;
     }
 
-    // 2. Form Number Logic
     let currentId = parseInt(localStorage.getItem('csr_last_id')) || 1;
-    let formattedId = "2026-" + currentId.toString().padStart(4, '0');
-    document.getElementById('reqNumber').innerText = formattedId;
+    document.getElementById('reqNumber').innerText = "2026-" + currentId.toString().padStart(4, '0');
 
-    // 3. Defaults
     document.getElementById('dateInput').valueAsDate = new Date();
     document.getElementById('timeInput').value = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
 
-    // 4. Data Submission
     async function submitToSheet() {
         const btn = document.getElementById('submitBtn');
         btn.innerText = "Processing...";
@@ -162,6 +158,7 @@
         const payload = {
             formNum: document.getElementById('reqNumber').innerText,
             dept: document.getElementById('dept').value,
+            email: document.getElementById('email').value, // Added Email
             date: document.getElementById('dateInput').value,
             time: document.getElementById('timeInput').value,
             items: items.join(" | "),
@@ -180,13 +177,12 @@
             window.print();
             location.reload();
         } catch (e) {
-            alert("Error sending data. Please check connection.");
+            alert("Error sending data.");
             btn.disabled = false;
             btn.innerText = "SUBMIT & PRINT REQUEST";
         }
     }
 
-    // 5. Canvas Drawing Logic
     function initCanvas(id) {
         const canvas = document.getElementById(id);
         const ctx = canvas.getContext("2d");
