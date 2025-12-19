@@ -8,7 +8,7 @@
         :root { 
             --hospital-navy: #002147; 
             --hospital-green: #28a745;
-            --aesthetic-pink: #ffe5ec; /* Professional Light Pink Background */
+            --aesthetic-pink: #ffe5ec; 
             --border-color: #ced4da;
         }
         
@@ -36,7 +36,7 @@
         .header { text-align: center; margin-bottom: 20px; }
         .logo { 
             max-width: 100%; 
-            width: 350px; /* Adjust size to fit your aesthetic preference */
+            width: 350px; 
             height: auto; 
             margin-bottom: 10px;
             border-radius: 8px;
@@ -48,7 +48,7 @@
         .form-no-box { border: 2px solid var(--hospital-navy); padding: 5px 12px; font-weight: bold; border-radius: 5px; background: #f8f9fa; }
         .form-no-box span { color: #d00; }
 
-        /* Mobile Friendly Grid */
+        /* Grid System */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 15px; }
         .input-group { display: flex; flex-direction: column; }
         label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: var(--hospital-navy); margin-bottom: 5px; }
@@ -74,23 +74,28 @@
         canvas { width: 100%; height: 140px; touch-action: none; }
         .clear-btn { margin-top: 8px; font-size: 12px; color: #d00; background: none; border: 1px solid #d00; padding: 4px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; }
 
+        /* Buttons */
         .submit-btn { 
             width: 100%; 
-            background: var(--hospital-green); 
             color: white; 
             border: none; 
             padding: 20px; 
-            font-size: 1.2rem; 
+            font-size: 1.1rem; 
             font-weight: bold; 
             border-radius: 10px; 
             cursor: pointer; 
-            margin-top: 25px;
             transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin: 5px;
         }
-        .submit-btn:active { transform: scale(0.98); background: #1e7e34; }
+        .submit-btn:active { transform: scale(0.98); opacity: 0.9; }
 
-        @media print { .submit-btn, .clear-btn, input[type="file"] { display: none; } }
+        @media print { 
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; border: none; margin: 0; padding: 0; width: 100%; max-width: 100%; }
+            .submit-btn, .clear-btn, input[type="file"] { display: none !important; } 
+            .sig-row { margin-top: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -151,10 +156,18 @@
         </div>
     </div>
 
-    <button id="submitBtn" class="submit-btn" onclick="submitForm()">SUBMIT REQUISITION</button>
+    <div class="sig-row" style="margin-top: 25px; gap: 10px;">
+        <button id="submitBtn" class="submit-btn" style="background: var(--hospital-navy);" onclick="submitForm(false)">
+            SUBMIT REQUEST
+        </button>
+        <button id="printBtn" class="submit-btn" style="background: var(--hospital-green);" onclick="submitForm(true)">
+            SUBMIT & PRINT COPY
+        </button>
+    </div>
 </div>
 
 <script>
+    // CHECK THIS URL AFTER DEPLOYING YOUR SCRIPT!
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzlwyOqw2rNenrrU6o7jw5eiRpqEbHiZFjQOfqnfA37SmXY4_ufoZcSaDqOX-5mNLM6/exec';
 
     const tbody = document.getElementById('tableBody');
@@ -167,10 +180,12 @@
     document.getElementById('dateInput').valueAsDate = new Date();
     document.getElementById('timeInput').value = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
 
-    async function submitForm() {
-        const btn = document.getElementById('submitBtn');
-        btn.innerText = "Processing...";
-        btn.disabled = true;
+    async function submitForm(shouldPrint) {
+        const btn1 = document.getElementById('submitBtn');
+        const btn2 = document.getElementById('printBtn');
+        
+        btn1.disabled = true; btn1.innerText = "Processing...";
+        btn2.disabled = true; btn2.innerText = "Processing...";
 
         let descs = [], qtys = [];
         document.querySelectorAll('#tableBody tr').forEach(tr => {
@@ -207,11 +222,26 @@
         fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
         .then(() => {
             localStorage.setItem('csr_id', currentId + 1);
-            alert("SUCCESS: Requisition submitted.");
-            location.reload();
+            
+            if (shouldPrint) {
+                alert("SUCCESS: Request Submitted. Opening Print View...");
+                // Hide buttons for print view
+                btn1.style.display = 'none';
+                btn2.style.display = 'none';
+                document.querySelectorAll('.clear-btn').forEach(b => b.style.display = 'none');
+                
+                window.print();
+                
+                // Reload after a short delay
+                setTimeout(() => { location.reload(); }, 1000);
+            } else {
+                alert("SUCCESS: Requisition submitted.");
+                location.reload();
+            }
         }).catch(() => {
             alert("Connection Error.");
-            btn.disabled = false;
+            btn1.disabled = false; btn1.innerText = "SUBMIT REQUEST";
+            btn2.disabled = false; btn2.innerText = "SUBMIT & PRINT COPY";
         });
     }
 
@@ -245,4 +275,3 @@
 
 </body>
 </html>
-
