@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Request Form</h1>
+        <p class="form-number">Form No: <span id="form-id">#0001</span></p>
+
+        <form id="requestForm">
+            <div class="input-group">
+                <label>Requesting Department</label>
+                <input type="text" required>
+            </div>
+
+            <div class="input-group">
+                <label>Date</label>
+                <input type="date" id="currentDate" required>
+            </div>
+
+            <div class="input-group">
+                <label>Item Description</label>
+                <textarea rows="3" required></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Quantity/Unit</label>
+                <input type="text" required>
+            </div>
+
+            <div class="input-group">
+                <label>Requested By</label>
+                <input type="text" required>
+            </div>
+
+            <div class="input-group">
+                <label>Upload Image</label>
+                <input type="file" accept="image/*">
+            </div>
+
+            <div class="input-group">
+                <label>Received By</label>
+                <input type="text" required>
+            </div>
+
+            <div class="signature-section">
+                <label>Signature</label>
+                <canvas id="sig-canvas" width="300" height="100"></canvas>
+                <button type="button" id="clear-signature">Clear Signature</button>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Request</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
