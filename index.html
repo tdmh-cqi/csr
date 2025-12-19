@@ -48,3 +48,106 @@
         <div class="grid-row">
             <div style="grid-column: span 2;">
                 <label>Item Description</label>
+                <textarea rows="3" required></textarea>
+            </div>
+        </div>
+
+        <div class="grid-row">
+            <div>
+                <label>Quantity / Unit</label>
+                <input type="text" placeholder="e.g. 50 Boxes" required>
+            </div>
+            <div>
+                <label>Upload Image Reference</label>
+                <input type="file" accept="image/*">
+            </div>
+        </div>
+
+        <div class="grid-row">
+            <div>
+                <label>Requested By</label>
+                <input type="text" placeholder="Print Name" required>
+            </div>
+            <div>
+                <label>Received By</label>
+                <input type="text" placeholder="CSR Personnel Name">
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="grid-row">
+            <div>
+                <label>Head of the Department (Signature)</label>
+                <div class="signature-wrapper">
+                    <canvas id="sig-dept-head"></canvas>
+                </div>
+                <button type="button" class="clear-btn" onclick="clearSignature(pad1)">Clear Signature</button>
+            </div>
+            <div>
+                <label>Approved by Hospital Administrator/CQI</label>
+                <div class="signature-wrapper">
+                    <canvas id="sig-admin"></canvas>
+                </div>
+                <button type="button" class="clear-btn" onclick="clearSignature(pad2)">Clear Signature</button>
+            </div>
+        </div>
+
+        <div class="submit-section">
+            <button type="submit" class="btn-submit">Submit Request</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // 1. Automated Form Number (Local Storage logic)
+    let lastNum = localStorage.getItem('csr_form_count') || 1000;
+    let nextNum = parseInt(lastNum) + 1;
+    document.getElementById('formNum').innerText = nextNum;
+
+    // 2. Set Current Date/Time
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('currentDateTime').value = now.toISOString().slice(0, 16);
+
+    // 3. Initialize Signature Pads
+    const canvas1 = document.getElementById('sig-dept-head');
+    const canvas2 = document.getElementById('sig-admin');
+    const pad1 = new SignaturePad(canvas1);
+    const pad2 = new SignaturePad(canvas2);
+
+    function clearSignature(pad) {
+        pad.clear();
+    }
+
+    // 4. Handle Submit
+    document.getElementById('requestForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (pad1.isEmpty() || pad2.isEmpty()) {
+            alert("Please ensure all required signatures are provided.");
+            return;
+        }
+
+        // Increment form number for next time
+        localStorage.setItem('csr_form_count', nextNum);
+        
+        alert("Request Submitted Successfully! Form No: " + nextNum);
+        location.reload(); 
+    });
+
+    // Adjust canvas size for resolution
+    window.onresize = resizeCanvases;
+    function resizeCanvases() {
+        [canvas1, canvas2].forEach(canvas => {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        });
+    }
+    resizeCanvases();
+</script>
+
+</body>
+</html>
