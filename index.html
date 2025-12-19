@@ -5,53 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSR Request Form 2026</title>
     <style>
-        :root { --hospital-red: #cc0000; --navy: #2c3e50; --light-bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #e9ecef; margin: 0; padding: 15px; }
-        
-        .form-container { 
-            max-width: 850px; margin: auto; background: #fff; padding: 40px; 
-            border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.15); border-top: 8px solid var(--navy);
-        }
-
+        :root { --hospital-red: #cc0000; --navy: #2c3e50; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #e9ecef; margin: 0; padding: 15px; }
+        .form-container { max-width: 850px; margin: auto; background: #fff; padding: 40px; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.1); border-top: 8px solid var(--navy); }
         .header { text-align: center; border-bottom: 2px solid var(--navy); margin-bottom: 30px; padding-bottom: 10px; position: relative; }
-        .header h1 { margin: 0; font-size: 28px; color: var(--navy); text-transform: uppercase; letter-spacing: 1px; }
-        .header p { margin: 5px 0; color: #555; font-weight: 500; }
         .form-id { color: var(--hospital-red); font-weight: bold; font-size: 1.3rem; position: absolute; right: 0; top: 0; }
-
         .row { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
         .col { flex: 1; min-width: 200px; }
         label { display: block; font-weight: 600; font-size: 0.85rem; color: #333; margin-bottom: 6px; text-transform: uppercase; }
-        input[type="text"], input[type="email"], input[type="date"], input[type="time"], input[type="file"] {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
-        }
-
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .item-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .item-table th { background: var(--navy); color: white; padding: 12px; text-align: left; font-size: 0.9rem; }
-        .item-table td { border: 1px solid #dee2e6; padding: 0; }
-        .item-table input { width: 100%; border: none; padding: 10px; box-sizing: border-box; outline: none; background: transparent; }
-        .item-table tr:nth-child(even) { background-color: #fcfcfc; }
-
+        .item-table th { background: var(--navy); color: white; padding: 12px; text-align: left; }
+        .item-table td { border: 1px solid #dee2e6; }
+        .item-table input { border: none; background: transparent; }
         .sig-row { display: flex; flex-wrap: wrap; gap: 30px; margin-top: 40px; }
         .sig-col { flex: 1; min-width: 280px; text-align: center; }
-        .canvas-container { border: 1px solid #333; background: #fff; border-radius: 4px; margin-bottom: 8px; }
+        .canvas-container { border: 1px solid #333; background: #fff; margin-bottom: 8px; }
         canvas { width: 100%; height: 120px; touch-action: none; cursor: crosshair; }
-        .sig-label { font-size: 0.8rem; font-weight: bold; border-top: 1px solid #eee; padding: 5px; color: #555; }
-        .clear-btn { font-size: 11px; color: var(--hospital-red); cursor: pointer; text-decoration: underline; background: none; border: none; }
-
-        .btn-submit { 
-            width: 100%; padding: 18px; background: #28a745; color: white; 
-            border: none; border-radius: 5px; font-size: 1.1rem; font-weight: bold; 
-            cursor: pointer; margin-top: 30px; transition: 0.3s;
-        }
-        .btn-submit:hover { background: #218838; }
-        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
-
-        @media print {
-            .btn-submit, .clear-btn, input[type="file"], label[for="imageUpload"], #imageUpload { display: none; }
-            body { background: white; padding: 0; }
-            .form-container { box-shadow: none; border: none; }
-            .canvas-container { border: 1px solid #eee; }
-        }
+        .btn-submit { width: 100%; padding: 18px; background: #28a745; color: white; border: none; border-radius: 5px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 30px; }
+        @media print { .btn-submit, .clear-btn, input[type="file"] { display: none; } }
     </style>
 </head>
 <body>
@@ -64,96 +36,60 @@
     </div>
 
     <div class="row">
-        <div class="col" style="flex: 2;">
-            <label>Requesting Department</label>
-            <input type="text" id="dept" placeholder="Enter department name">
-        </div>
-        <div class="col">
-            <label>Department Email Address</label>
-            <input type="email" id="email" placeholder="dept@hospital.com">
-        </div>
+        <div class="col" style="flex: 2;"><label>Department</label><input type="text" id="dept"></div>
+        <div class="col"><label>Email</label><input type="email" id="email"></div>
     </div>
 
     <div class="row">
-        <div class="col">
-            <label>Date</label>
-            <input type="date" id="dateInput">
-        </div>
-        <div class="col">
-            <label>Time</label>
-            <input type="time" id="timeInput">
-        </div>
+        <div class="col"><label>Date</label><input type="date" id="dateInput"></div>
+        <div class="col"><label>Time</label><input type="time" id="timeInput"></div>
     </div>
 
     <table class="item-table">
-        <thead>
-            <tr>
-                <th>Item Description</th>
-                <th style="width: 200px;">Quantity / Unit</th>
-            </tr>
-        </thead>
+        <thead><tr><th>Item Description</th><th style="width: 200px;">Qty/Unit</th></tr></thead>
         <tbody id="tableBody"></tbody>
     </table>
 
-    <div class="row" style="margin-top: 20px;">
-        <div class="col">
-            <label for="imageUpload">Upload Reference Image (Optional)</label>
-            <input type="file" id="imageUpload" accept="image/*">
-            <p style="font-size: 11px; color: #888; margin-top: 5px;">Upload a photo of the item for reference.</p>
-        </div>
+    <div class="row" style="margin-top:20px;">
+        <div class="col"><label>Reference Photo</label><input type="file" id="imageUpload" accept="image/*"></div>
     </div>
 
-    <div class="row" style="margin-top: 25px;">
-        <div class="col">
-            <label>Requested By</label>
-            <input type="text" id="reqBy" placeholder="Print Name">
-        </div>
-        <div class="col">
-            <label>Received By</label>
-            <input type="text" id="recBy" placeholder="Print Name">
-        </div>
+    <div class="row">
+        <div class="col"><label>Requested By</label><input type="text" id="reqBy"></div>
+        <div class="col"><label>Received By</label><input type="text" id="recBy"></div>
     </div>
 
     <div class="sig-row">
         <div class="sig-col">
-            <label>Head of Department</label>
-            <div class="canvas-container">
-                <canvas id="sig-hod"></canvas>
-                <div class="sig-label">Authorized Signature</div>
-            </div>
-            <button class="clear-btn" onclick="clearSig('sig-hod')">Clear Signature</button>
+            <label>HOD Signature (Col K)</label>
+            <div class="canvas-container"><canvas id="sig-hod"></canvas></div>
+            <button onclick="clearSig('sig-hod')">Clear</button>
         </div>
         <div class="sig-col">
-            <label>Hospital Administrator / CQI</label>
-            <div class="canvas-container">
-                <canvas id="sig-admin"></canvas>
-                <div class="sig-label">Approved by Signature</div>
-            </div>
-            <button class="clear-btn" onclick="clearSig('sig-admin')">Clear Signature</button>
+            <label>Admin Signature (Col L)</label>
+            <div class="canvas-container"><canvas id="sig-admin"></canvas></div>
+            <button onclick="clearSig('sig-admin')">Clear</button>
         </div>
     </div>
 
-    <button id="submitBtn" class="btn-submit" onclick="submitToSheet()">SUBMIT & PRINT REQUEST</button>
+    <button id="submitBtn" class="btn-submit" onclick="submitToSheet()">SUBMIT TO GOOGLE SHEET</button>
 </div>
 
 <script>
-    const SCRIPT_URL = 'PASTE_YOUR_NEW_DEPLOYMENT_URL_HERE';
+    // --- REPLACE THIS WITH YOUR WEB APP URL ---
+    const SCRIPT_URL = 'PASTE_YOUR_NEW_DEPLOY_URL_HERE';
 
+    // Build Table
     const tbody = document.getElementById('tableBody');
     for (let i = 0; i < 10; i++) {
-        tbody.innerHTML += `<tr>
-            <td><input type="text" class="item-desc" placeholder="..."></td>
-            <td><input type="text" class="item-qty" placeholder="..."></td>
-        </tr>`;
+        tbody.innerHTML += `<tr><td><input type="text" class="item-desc"></td><td><input type="text" class="item-qty"></td></tr>`;
     }
 
+    // Auto Number
     let currentId = parseInt(localStorage.getItem('csr_last_id')) || 1;
     document.getElementById('reqNumber').innerText = "2026-" + currentId.toString().padStart(4, '0');
-
     document.getElementById('dateInput').valueAsDate = new Date();
-    document.getElementById('timeInput').value = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
 
-    // Helper to convert File to Base64
     const fileToBase64 = file => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -163,98 +99,4 @@
 
     async function submitToSheet() {
         const btn = document.getElementById('submitBtn');
-        const fileInput = document.getElementById('imageUpload');
-        
-        if(!document.getElementById('dept').value || !document.getElementById('reqBy').value) {
-            alert("Please fill in Department and Requested By.");
-            return;
-        }
-
-        btn.innerText = "Processing Data & Images...";
-        btn.disabled = true;
-
-        let itemsArr = [];
-        document.querySelectorAll('#tableBody tr').forEach(tr => {
-            let d = tr.querySelector('.item-desc').value;
-            let q = tr.querySelector('.item-qty').value;
-            if(d) itemsArr.push(`${d} (${q})`);
-        });
-
-        // Convert Signatures and Uploaded Image to Base64
-        const sigHod = document.getElementById('sig-hod').toDataURL("image/png");
-        const sigAdmin = document.getElementById('sig-admin').toDataURL("image/png");
-        
-        let uploadedImage = "";
-        if (fileInput.files.length > 0) {
-            uploadedImage = await fileToBase64(fileInput.files[0]);
-        }
-
-        const payload = {
-            formNum: document.getElementById('reqNumber').innerText,
-            dept: document.getElementById('dept').value,
-            email: document.getElementById('email').value,
-            date: document.getElementById('dateInput').value,
-            time: document.getElementById('timeInput').value,
-            items: itemsArr.join(" | "),
-            reqBy: document.getElementById('reqBy').value,
-            recBy: document.getElementById('recBy').value,
-            sigHod: sigHod,
-            sigAdmin: sigAdmin,
-            refImage: uploadedImage // This is Column H
-        };
-
-        try {
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(payload)
-            });
-            
-            localStorage.setItem('csr_last_id', currentId + 1);
-            alert("Sent to Google Sheets!");
-            window.print();
-            location.reload();
-        } catch (e) {
-            alert("Error sending data.");
-            btn.disabled = false;
-            btn.innerText = "SUBMIT & PRINT REQUEST";
-        }
-    }
-
-    function initCanvas(id) {
-        const canvas = document.getElementById(id);
-        const ctx = canvas.getContext("2d");
-        let drawing = false;
-        const ratio = window.devicePixelRatio || 1;
-        canvas.width = canvas.offsetWidth * ratio;
-        canvas.height = canvas.offsetHeight * ratio;
-        ctx.scale(ratio, ratio);
-
-        const getPos = (e) => {
-            const r = canvas.getBoundingClientRect();
-            const cx = e.touches ? e.touches[0].clientX : e.clientX;
-            const cy = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: cx - r.left, y: cy - r.top };
-        };
-
-        const start = (e) => { drawing = true; ctx.beginPath(); const p = getPos(e); ctx.moveTo(p.x, p.y); if(e.touches) e.preventDefault(); };
-        const draw = (e) => { if(!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.lineWidth = 2; ctx.stroke(); if(e.touches) e.preventDefault(); };
-        const stop = () => drawing = false;
-
-        canvas.addEventListener("mousedown", start);
-        canvas.addEventListener("mousemove", draw);
-        window.addEventListener("mouseup", stop);
-        canvas.addEventListener("touchstart", start, {passive:false});
-        canvas.addEventListener("touchmove", draw, {passive:false});
-        canvas.addEventListener("touchend", stop);
-    }
-
-    function clearSig(id) {
-        const c = document.getElementById(id);
-        c.getContext("2d").clearRect(0, 0, c.width, c.height);
-    }
-
-    window.onload = () => { initCanvas('sig-hod'); initCanvas('sig-admin'); };
-</script>
-</body>
-</html>
+        btn.innerText = "Sending...";
