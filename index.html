@@ -12,6 +12,7 @@
 
         body {
             font-family: 'Roboto', sans-serif;
+            /* Background Image */
             background: url('images/tdmh-background.jpg') no-repeat center center fixed; 
             background-size: cover;
             margin: 0;
@@ -23,11 +24,13 @@
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.95); /* 95% White opacity */
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             backdrop-filter: blur(5px); 
+            /* --- RESTORED DARK BLUE OUTLINE --- */
+            border: 2px solid #002147;
         }
 
         .header {
@@ -35,19 +38,19 @@
             margin-bottom: 30px;
         }
 
-        /* --- FIXED LOGO STYLING --- */
+        /* Clickable Logo */
         .logo {
-            max-width: 300px; /* Increased size significantly */
+            max-width: 300px;
             margin-bottom: 15px;
             background: transparent !important;
             box-shadow: none !important;
             border: none !important;
-            transition: transform 0.3s ease; /* Smooth zoom animation */
-            cursor: pointer; /* Shows it is clickable */
+            transition: transform 0.3s ease;
+            cursor: pointer;
         }
         
         .logo:hover {
-            transform: scale(1.1); /* Zooms in when hovered */
+            transform: scale(1.1);
         }
 
         h1 {
@@ -72,18 +75,17 @@
             margin-bottom: 25px;
         }
 
-        /* --- FIXED NUMBER STYLING (RED) --- */
+        /* Red Form Number Box */
         .req-no-box {
             border: 2px solid #002147;
             padding: 8px 15px;
             border-radius: 5px;
             font-size: 16px;
-            color: #dc3545; /* Changed to RED */
+            color: #dc3545; /* Red */
             font-weight: bold;
             background-color: #f0f4f8;
         }
         
-        /* Ensures the span inside inherits the red color */
         .req-no-box span {
             color: #dc3545;
         }
@@ -249,7 +251,7 @@
 
             <div class="form-group" style="margin-top: 20px;">
                 <label for="refPhoto">REFERENCE PHOTO</label>
-                <input type="file" id="refPhoto" accept="image/*">
+                <input type="file" id="refPhoto" accept="image/*" capture="environment">
                 <p style="font-size: 12px; color: #666; margin-top: 5px;">*Tap to take a photo or select from gallery</p>
             </div>
 
