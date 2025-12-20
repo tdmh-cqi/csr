@@ -12,7 +12,6 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            /* FIXED: Points to your images folder */
             background: url('images/tdmh-background.jpg') no-repeat center center fixed; 
             background-size: cover;
             margin: 0;
@@ -21,11 +20,10 @@
             min-height: 100vh;
         }
 
-        /* Semi-transparent overlay to make text readable against the background */
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95); /* 95% White opacity */
+            background: rgba(255, 255, 255, 0.95);
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
@@ -37,12 +35,19 @@
             margin-bottom: 30px;
         }
 
+        /* --- FIXED LOGO STYLING --- */
         .logo {
-            max-width: 150px;
+            max-width: 300px; /* Increased size significantly */
             margin-bottom: 15px;
             background: transparent !important;
             box-shadow: none !important;
             border: none !important;
+            transition: transform 0.3s ease; /* Smooth zoom animation */
+            cursor: pointer; /* Shows it is clickable */
+        }
+        
+        .logo:hover {
+            transform: scale(1.1); /* Zooms in when hovered */
         }
 
         h1 {
@@ -67,13 +72,20 @@
             margin-bottom: 25px;
         }
 
+        /* --- FIXED NUMBER STYLING (RED) --- */
         .req-no-box {
             border: 2px solid #002147;
             padding: 8px 15px;
             border-radius: 5px;
             font-size: 16px;
-            color: #002147;
+            color: #dc3545; /* Changed to RED */
+            font-weight: bold;
             background-color: #f0f4f8;
+        }
+        
+        /* Ensures the span inside inherits the red color */
+        .req-no-box span {
+            color: #dc3545;
         }
 
         .form-group { margin-bottom: 20px; }
@@ -141,7 +153,7 @@
         .signature-pad-body {
             border: 2px dashed #ccc;
             border-radius: 10px;
-            background-color: #fff; /* Ensure white background for drawing */
+            background-color: #fff;
             margin-bottom: 10px;
             height: 150px; 
             position: relative;
@@ -152,7 +164,7 @@
             height: 100%;
             display: block;
             border-radius: 10px;
-            touch-action: none; /* Prevents scrolling while signing on mobile */
+            touch-action: none; 
         }
 
         .clear-btn {
@@ -186,7 +198,9 @@
 
     <div class="container">
         <div class="header">
-            <img src="images/tdmh-logo.png" alt="TDMH Logo" class="logo">
+            <a href="javascript:location.reload()">
+                <img src="images/tdmh-logo.png" alt="TDMH Logo" class="logo">
+            </a>
             <h1>CENTRAL SUPPLY ROOM<br>2026</h1>
             <p class="subtitle">REQUISITION SLIP</p>
         </div>
@@ -274,12 +288,12 @@
 
     <script>
         // ==========================================
-        // 1. CONFIGURATION (URL INTEGRATED)
+        // 1. CONFIGURATION (URL ALREADY INTEGRATED)
         // ==========================================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZwibE-gsshjVXOIIl6KrAsqx-3J6lNwRhbK9GK3JEm-2Sf1jbIT0rzw7ZwIoZeE4yWQ/exec"; 
         
         // ==========================================
-        // 2. SIGNATURE PAD LOGIC (FIXED)
+        // 2. SIGNATURE PAD LOGIC
         // ==========================================
         var signaturePadHod, signaturePadAdmin;
 
@@ -294,7 +308,6 @@
                 canvas.getContext("2d").scale(ratio, ratio);
             }
 
-            // Initialize logic
             resizeCanvas(canvasHod);
             resizeCanvas(canvasAdmin);
 
@@ -302,11 +315,6 @@
             signaturePadAdmin = new SignaturePad(canvasAdmin);
         }
         
-        // Run init when window loads
-        window.addEventListener("resize", function() {
-           // Optional resize logic
-        });
-
         // ==========================================
         // 3. MAIN SCRIPT LOGIC
         // ==========================================
@@ -368,12 +376,10 @@
             const form = document.getElementById('csrForm');
             const formData = new FormData(form);
             
-            // Collect Table Data
             let itemDescs = [], itemQtys = [];
             document.querySelectorAll('input[name="itemDesc[]"]').forEach(input => itemDescs.push(input.value));
             document.querySelectorAll('input[name="itemQty[]"]').forEach(input => itemQtys.push(input.value));
 
-            // Prepare Data Object
             let data = {
                 formNum: document.getElementById('formNumber').innerText,
                 dept: formData.get('department'),
@@ -389,12 +395,11 @@
                 refImage: ""
             };
 
-            // Handle Image Upload
             const fileInput = document.getElementById('refPhoto');
             if (fileInput.files.length > 0) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    data.refImage = e.target.result; // Base64
+                    data.refImage = e.target.result;
                     sendData(data, shouldPrint);
                 };
                 reader.readAsDataURL(fileInput.files[0]);
