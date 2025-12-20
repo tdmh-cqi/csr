@@ -12,19 +12,24 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f4f7f6;
+            /* FIXED: Points to your images folder */
+            background: url('images/tdmh-background.jpg') no-repeat center center fixed; 
+            background-size: cover;
             margin: 0;
             padding: 20px;
             color: #333;
+            min-height: 100vh;
         }
 
+        /* Semi-transparent overlay to make text readable against the background */
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.95); /* 95% White opacity */
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px); 
         }
 
         .header {
@@ -35,9 +40,9 @@
         .logo {
             max-width: 150px;
             margin-bottom: 15px;
-            box-shadow: none !important; 
-            border: none !important;
             background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
 
         h1 {
@@ -71,18 +76,9 @@
             background-color: #f0f4f8;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 20px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: flex; gap: 20px; }
+        .form-row .form-group { flex: 1; }
 
         label {
             display: block;
@@ -92,11 +88,7 @@
             font-size: 14px;
         }
 
-        input[type="text"],
-        input[type="email"],
-        input[type="date"],
-        input[type="time"],
-        input[type="number"] {
+        input[type="text"], input[type="email"], input[type="date"], input[type="time"], input[type="number"] {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
@@ -117,10 +109,21 @@
             cursor: pointer;
         }
 
+        /* Responsive Table */
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
         .item-table {
             width: 100%;
+            min-width: 500px; 
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
 
         .item-table th, .item-table td {
@@ -129,36 +132,29 @@
             text-align: center;
         }
 
-        .item-table th {
-            background-color: #002147;
-            color: white;
-            font-weight: 500;
-        }
+        .item-table th { background-color: #002147; color: white; font-weight: 500; }
+        .item-table input { border: none; padding: 8px; width: 100%; text-align: center; box-sizing: border-box; }
 
-        .item-table input {
-            border: none;
-            padding: 8px;
-            width: 100%;
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        .signature-section {
-            margin-bottom: 25px;
-            text-align: center;
-        }
+        /* Signature Canvas */
+        .signature-section { margin-bottom: 25px; text-align: center; }
+        
         .signature-pad-body {
             border: 2px dashed #ccc;
             border-radius: 10px;
-            background-color: #fdfdfd;
+            background-color: #fff; /* Ensure white background for drawing */
             margin-bottom: 10px;
+            height: 150px; 
+            position: relative;
         }
+
         canvas {
             width: 100%;
-            height: 150px;
+            height: 100%;
             display: block;
             border-radius: 10px;
+            touch-action: none; /* Prevents scrolling while signing on mobile */
         }
+
         .clear-btn {
             background: white;
             border: 1px solid #dc3545;
@@ -169,50 +165,20 @@
             font-weight: bold;
         }
 
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
+        .btn-group { display: flex; gap: 15px; margin-top: 30px; }
         .btn {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            color: white;
+            flex: 1; padding: 15px; border: none; border-radius: 8px;
+            font-size: 16px; font-weight: 700; cursor: pointer; color: white;
         }
         .btn-primary { background-color: #002147; }
         .btn-success { background-color: #28a745; }
 
         @media (max-width: 768px) {
             body { padding: 10px; }
-            .container {
-                padding: 15px;
-                box-shadow: none;
-            }
+            .container { padding: 15px; }
             h1 { font-size: 20px; }
-            .form-row {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .table-responsive {
-                display: block;
-                width: 100%;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                margin-bottom: 20px;
-                border: 1px solid #eee;
-                border-radius: 8px;
-            }
-            .item-table {
-                min-width: 500px;
-            }
-            .btn-group {
-                flex-direction: column;
-            }
+            .form-row { flex-direction: column; gap: 10px; }
+            .btn-group { flex-direction: column; }
         }
     </style>
 </head>
@@ -220,7 +186,7 @@
 
     <div class="container">
         <div class="header">
-            <img src="tdmh-logo.png" alt="TDMH Logo" class="logo">
+            <img src="images/tdmh-logo.png" alt="TDMH Logo" class="logo">
             <h1>CENTRAL SUPPLY ROOM<br>2026</h1>
             <p class="subtitle">REQUISITION SLIP</p>
         </div>
@@ -307,8 +273,151 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxS2Vvl_7Q2s-J6gR3t-E0e1d4_F5gH8i9k0L1m2n3o4p5q/exec"; 
+        // ==========================================
+        // 1. CONFIGURATION (URL INTEGRATED)
+        // ==========================================
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZwibE-gsshjVXOIIl6KrAsqx-3J6lNwRhbK9GK3JEm-2Sf1jbIT0rzw7ZwIoZeE4yWQ/exec"; 
+        
+        // ==========================================
+        // 2. SIGNATURE PAD LOGIC (FIXED)
+        // ==========================================
+        var signaturePadHod, signaturePadAdmin;
+
+        function initSignatures() {
+            var canvasHod = document.getElementById('hodSignature');
+            var canvasAdmin = document.getElementById('adminSignature');
+
+            function resizeCanvas(canvas) {
+                var ratio = Math.max(window.devicePixelRatio || 1, 1);
+                canvas.width = canvas.offsetWidth * ratio;
+                canvas.height = canvas.offsetHeight * ratio;
+                canvas.getContext("2d").scale(ratio, ratio);
+            }
+
+            // Initialize logic
+            resizeCanvas(canvasHod);
+            resizeCanvas(canvasAdmin);
+
+            signaturePadHod = new SignaturePad(canvasHod);
+            signaturePadAdmin = new SignaturePad(canvasAdmin);
+        }
+        
+        // Run init when window loads
+        window.addEventListener("resize", function() {
+           // Optional resize logic
+        });
+
+        // ==========================================
+        // 3. MAIN SCRIPT LOGIC
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Generate Table Rows
+            const tbody = document.querySelector('#itemTable tbody');
+            for (let i = 1; i <= 10; i++) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${i}</td>
+                    <td><input type="text" name="itemDesc[]" placeholder="Item ${i}"></td>
+                    <td><input type="number" name="itemQty[]" placeholder="0"></td>
+                `;
+                tbody.appendChild(tr);
+            }
+
+            // Initialize Signatures
+            initSignatures();
+            
+            // Load Form Number
+            fetch(SCRIPT_URL + "?action=getFormNumber")
+            .then(res => res.text())
+            .then(num => {
+                document.getElementById('formNumber').innerText = num;
+            })
+            .catch(err => document.getElementById('formNumber').innerText = "Error");
+            
+            // Set Date/Time Defaults
+            const now = new Date();
+            document.getElementById('date').valueAsDate = now;
+            document.getElementById('time').value = now.toTimeString().substring(0,5);
+        });
+
+        function clearSignature(id) {
+            if(id === 'hodSignature') signaturePadHod.clear();
+            if(id === 'adminSignature') signaturePadAdmin.clear();
+        }
+
+        // ==========================================
+        // 4. SUBMIT LOGIC
+        // ==========================================
+        document.getElementById('csrForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleSubmit(false);
+        });
+
+        document.getElementById('printBtn').addEventListener('click', function() {
+            if(document.getElementById('csrForm').checkValidity()) {
+                handleSubmit(true);
+            } else {
+                document.getElementById('csrForm').reportValidity();
+            }
+        });
+
+        function handleSubmit(shouldPrint) {
+            Swal.fire({ title: 'Submitting...', text: 'Please wait', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+
+            const form = document.getElementById('csrForm');
+            const formData = new FormData(form);
+            
+            // Collect Table Data
+            let itemDescs = [], itemQtys = [];
+            document.querySelectorAll('input[name="itemDesc[]"]').forEach(input => itemDescs.push(input.value));
+            document.querySelectorAll('input[name="itemQty[]"]').forEach(input => itemQtys.push(input.value));
+
+            // Prepare Data Object
+            let data = {
+                formNum: document.getElementById('formNumber').innerText,
+                dept: formData.get('department'),
+                email: formData.get('email'),
+                date: formData.get('date'),
+                time: formData.get('time'),
+                reqBy: formData.get('requestedBy'),
+                recBy: formData.get('receivedBy'),
+                itemDescs: itemDescs.join(" | "), 
+                itemQtys: itemQtys.join(" | "),
+                sigHod: signaturePadHod.isEmpty() ? "" : signaturePadHod.toDataURL(),
+                sigAdmin: signaturePadAdmin.isEmpty() ? "" : signaturePadAdmin.toDataURL(),
+                refImage: ""
+            };
+
+            // Handle Image Upload
+            const fileInput = document.getElementById('refPhoto');
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    data.refImage = e.target.result; // Base64
+                    sendData(data, shouldPrint);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                sendData(data, shouldPrint);
+            }
+        }
+
+        function sendData(data, shouldPrint) {
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(data)
+            })
+            .then(response => response.text())
+            .then(result => {
+                Swal.fire({ icon: 'success', title: 'Success!', text: 'Request Submitted.' });
+                if (shouldPrint) window.print();
+                setTimeout(() => location.reload(), 2000);
+            })
+            .catch(error => {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong.' });
+            });
+        }
     </script>
-    <script src="script.js"></script>
 </body>
 </html>
