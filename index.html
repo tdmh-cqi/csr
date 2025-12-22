@@ -61,6 +61,15 @@
             line-height: 1.2;
         }
 
+        /* NEW: CQI Credit Style */
+        .cqi-credit {
+            font-size: 18px; /* Slightly larger than subtitle */
+            color: #0056b3;  /* Professional Blue */
+            font-weight: 700;
+            margin: 10px 0 5px 0;
+            letter-spacing: 0.5px;
+        }
+
         .subtitle {
             font-size: 16px;
             color: #555;
@@ -194,6 +203,7 @@
             h1 { font-size: 20px; }
             .form-row { flex-direction: column; gap: 10px; }
             .btn-group { flex-direction: column; }
+            .cqi-credit { font-size: 16px; } /* Adjust for mobile */
         }
     </style>
 </head>
@@ -205,6 +215,9 @@
                 <img src="images/tdmh-logo.png" alt="TDMH Logo" class="logo">
             </a>
             <h1>CENTRAL SUPPLY ROOM<br>2026</h1>
+            
+            <p class="cqi-credit">CQI: Continuous Quality Improvement</p>
+            
             <p class="subtitle">REQUISITION SLIP</p>
         </div>
 
