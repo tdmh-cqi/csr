@@ -354,7 +354,47 @@
         }
 
         // ==========================================
-        // 4. SUBMIT LOGIC
+        // 4. IMAGE COMPRESSION (NEW HIGH QUALITY LOGIC)
+        // ==========================================
+        function compressImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = event => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        
+                        // SETTINGS: 1920px Width (Full HD) for Zooming Capability
+                        const MAX_WIDTH = 1920; 
+                        
+                        let width = img.width;
+                        let height = img.height;
+
+                        // Calculate new dimensions while keeping aspect ratio
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // SETTINGS: 0.9 Quality (90%) - High Detail, Low File Size
+                        resolve(canvas.toDataURL('image/jpeg', 0.9));
+                    };
+                    img.onerror = error => reject(error);
+                };
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // ==========================================
+        // 5. SUBMIT LOGIC (WITH COMPRESSION)
         // ==========================================
         document.getElementById('csrForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -370,7 +410,8 @@
         });
 
         function handleSubmit(shouldPrint) {
-            Swal.fire({ title: 'Submitting...', text: 'Please wait', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+            // Updated Message to indicate optimization
+            Swal.fire({ title: 'Submitting...', text: 'Optimizing images & sending...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
 
             const form = document.getElementById('csrForm');
             const formData = new FormData(form);
@@ -390,22 +431,17 @@
                 let qtyVal = qtyInputs[index].value;
                 let photoFile = photoInputs[index].files[0];
 
-                itemDescs.push(input.value); // keep exact index even if empty (will be cleaned by Apps Script)
+                itemDescs.push(input.value); // keep exact index even if empty
                 itemQtys.push(qtyVal);
 
                 // Only process photo if an item is actually typed in that row
                 if (itemVal !== "" && photoFile) {
-                    // Create a promise to read this specific file
-                    let p = new Promise((resolve, reject) => {
-                        let reader = new FileReader();
-                        reader.onload = (e) => {
-                            resolve({
-                                itemName: itemVal,
-                                base64: e.target.result
-                            });
+                    // USE COMPRESSION FUNCTION
+                    let p = compressImage(photoFile).then(base64 => {
+                        return {
+                            itemName: itemVal,
+                            base64: base64
                         };
-                        reader.onerror = reject;
-                        reader.readAsDataURL(photoFile);
                     });
                     fileReadPromises.push(p);
                 }
@@ -431,7 +467,8 @@
 
                 sendData(data, shouldPrint);
             }).catch(err => {
-                Swal.fire('Error', 'Failed to read images', 'error');
+                console.error(err);
+                Swal.fire('Error', 'Failed to process images', 'error');
             });
         }
 
