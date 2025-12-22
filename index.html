@@ -53,23 +53,22 @@
             transform: scale(1.1);
         }
 
+        /* NEW: FANCY CQI STYLE (Matches your Reference Photo) */
+        .cqi-title {
+            font-family: 'Georgia', 'Times New Roman', serif; /* Fancy/Professional Font */
+            font-size: 26px; /* Bigger Size */
+            color: #003366;  /* Professional Blue to match Logo */
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
         h1 {
             font-size: 24px;
             color: #002147;
             margin: 0;
             font-weight: 700;
             line-height: 1.2;
-        }
-
-        /* NEW: FANCY CQI CREDIT STYLE */
-        .cqi-credit {
-            /* 'Georgia' gives it that Fancy/Professional "Diploma" look */
-            font-family: 'Georgia', 'Times New Roman', serif; 
-            font-size: 22px; /* Larger and more prominent */
-            color: #0056b3;  /* Professional Blue */
-            font-weight: 700;
-            margin: 15px 0 10px 0; /* Spacing to let it breathe */
-            letter-spacing: 0.5px;
         }
 
         .subtitle {
@@ -203,9 +202,9 @@
             body { padding: 10px; }
             .container { padding: 15px; }
             h1 { font-size: 20px; }
+            .cqi-title { font-size: 20px; } /* Mobile Adjustment */
             .form-row { flex-direction: column; gap: 10px; }
             .btn-group { flex-direction: column; }
-            .cqi-credit { font-size: 18px; } /* Slightly smaller for mobile but still big */
         }
     </style>
 </head>
@@ -216,10 +215,10 @@
             <a href="javascript:location.reload()">
                 <img src="images/tdmh-logo.png" alt="TDMH Logo" class="logo">
             </a>
+            
+            <div class="cqi-title">CQI: Continuous Quality Improvement</div>
+            
             <h1>CENTRAL SUPPLY ROOM<br>2026</h1>
-            
-            <p class="cqi-credit">CQI: Continuous Quality Improvement</p>
-            
             <p class="subtitle">REQUISITION SLIP</p>
         </div>
 
