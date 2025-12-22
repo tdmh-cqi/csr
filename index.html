@@ -61,12 +61,14 @@
             line-height: 1.2;
         }
 
-        /* NEW: CQI Credit Style */
+        /* NEW: FANCY CQI CREDIT STYLE */
         .cqi-credit {
-            font-size: 18px; /* Slightly larger than subtitle */
+            /* 'Georgia' gives it that Fancy/Professional "Diploma" look */
+            font-family: 'Georgia', 'Times New Roman', serif; 
+            font-size: 22px; /* Larger and more prominent */
             color: #0056b3;  /* Professional Blue */
             font-weight: 700;
-            margin: 10px 0 5px 0;
+            margin: 15px 0 10px 0; /* Spacing to let it breathe */
             letter-spacing: 0.5px;
         }
 
@@ -203,7 +205,7 @@
             h1 { font-size: 20px; }
             .form-row { flex-direction: column; gap: 10px; }
             .btn-group { flex-direction: column; }
-            .cqi-credit { font-size: 16px; } /* Adjust for mobile */
+            .cqi-credit { font-size: 18px; } /* Slightly smaller for mobile but still big */
         }
     </style>
 </head>
